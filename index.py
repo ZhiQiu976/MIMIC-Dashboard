@@ -4,13 +4,12 @@ from dash.dependencies import Input, Output, State
 import dash_bootstrap_components as dbc
 import dash
 
-#from app import app
+from app import app
 # import all pages in the app
-#from apps import EDA, Predictions, home
-from apps import home
+from apps import home, EDA
 
-external_stylesheets = [dbc.themes.LUX]
-app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
+#external_stylesheets = [dbc.themes.LUX]
+#app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
 # building the navigation bar
 # https://github.com/facultyai/dash-bootstrap-components/blob/master/examples/advanced-component-usage/Navbars.py
@@ -19,9 +18,9 @@ dropdown = dbc.DropdownMenu(
         dbc.DropdownMenuItem("Home",
                              href="/haha"
                              ),
-#        dbc.DropdownMenuItem("EDA",
-#                             href="/EDA"
-#                             ),
+        dbc.DropdownMenuItem("EDA",
+                             href="/EDA"
+                             ),
 #        dbc.DropdownMenuItem("Predictions",
 #                             href="/Predictions"
 #                             ),
@@ -85,12 +84,12 @@ app.layout = html.Div([
 @app.callback(Output('page-content', 'children'),
               [Input('url', 'pathname')])
 def display_page(pathname):
-#    if pathname == '/EDA':
-#        return EDA.layout
-#    elif pathname == '/Predictions':
+    if pathname == '/EDA':
+        return EDA.layout
+#    elif pathname == '/apps/Predictions':
 #        return Predictions.layout
-#    else:
-    return home.layout
+    else:
+        return home.layout
 
 if __name__ == '__main__':
     app.run_server(debug=True)

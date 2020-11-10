@@ -6,6 +6,8 @@ import dash
 
 #app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
+from app import app
+
 # change to app.layout if running as single page app instead
 layout = html.Div([
     dbc.Container([
