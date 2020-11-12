@@ -6,7 +6,7 @@ import dash
 
 from app import app
 # import all pages in the app
-from apps import home, EDA
+from apps import home, EDA, Predictions
 
 #external_stylesheets = [dbc.themes.LUX]
 #app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
@@ -21,9 +21,9 @@ dropdown = dbc.DropdownMenu(
         dbc.DropdownMenuItem("EDA",
                              href="/EDA"
                              ),
-#        dbc.DropdownMenuItem("Predictions",
-#                             href="/Predictions"
-#                             ),
+        dbc.DropdownMenuItem("Predictions",
+                            href="/Predictions"
+                            ),
     ],
     nav = True,
     in_navbar = True,
@@ -86,8 +86,8 @@ app.layout = html.Div([
 def display_page(pathname):
     if pathname == '/EDA':
         return EDA.layout
-#    elif pathname == '/apps/Predictions':
-#        return Predictions.layout
+    elif pathname == '/Predictions':
+        return Predictions.layout
     else:
         return home.layout
 
