@@ -5,13 +5,14 @@ import dash
 import plotly.graph_objects as go
 from dash.dependencies import Input, Output
 import pandas as pd
+import numpy as np
 
 from sklearn.metrics import confusion_matrix, f1_score, accuracy_score, precision_score, recall_score
 
 from app import app
 
 # function1
-def plot_confusion_matrix(cm, labels, title):
+def plot_confusion_matrix(cm, labels):
     '''
     Function for plotting confusion matrix (normalized).
     
@@ -36,7 +37,6 @@ def plot_confusion_matrix(cm, labels, title):
                 }
             )
     layout = {
-        "title": title,
         "xaxis": {"title": "Predicted value"},
         "yaxis": {"title": "Real value"},
         "annotations": annotations,
@@ -70,7 +70,7 @@ def plot_df(df_test, df_train):
     }
     
     fig = go.Figure(data=[go.Table(
-        header=dict(values=list(['Evaluation Metric', 'Training', 'Testing']),
+        header=dict(values=list(['Metric', 'Training', 'Testing']),
                     line_color='white', fill_color='white',
                     align='left', font=dict(color='black', size=12)),
         cells=dict(values=[df.Metric, df.Training, df.Testing],
@@ -84,13 +84,13 @@ def plot_df(df_test, df_train):
 
 
 # data
-df_train = pd.read_csv('train_results_decoded.csv', index_col=0)
-df_test = pd.read_csv('test_results_decoded.csv', index_col=0)
+df_train = pd.read_csv('./Data/train_results_decoded.csv', index_col=0)
+df_test = pd.read_csv('./Data/test_results_decoded.csv', index_col=0)
 
 layout = html.Div([
     dbc.Container([
         dbc.Row([
-            dbc.Col(html.H1(children='Model Performance and Predictions'), className="mb-2")
+            dbc.Col(html.H1(children='Model Performance and Predictions for Discharge Locations'), className="mb-2")
         ]),
         dbc.Row([
             dbc.Col(html.H6(children='Visualization of model performance, feature importance and prediction results.'), className="mb-4")
@@ -111,18 +111,19 @@ layout = html.Div([
         ),
 # for some reason, font colour remains black if using the color option
     dbc.Row([
-        dbc.Col(dbc.Card(html.H3(children='Target Variable: Discharge Locations',
+        dbc.Col(dbc.Card(html.H3(children='Model Performance Evaluation',
                                  className="text-center text-light bg-dark"), body=True, color="dark")
         , className="mt-4 mb-4")
     ]),
     dbc.Row([
-        dbc.Col(html.H5(children='Model Performance Evaluation:', className="text-center"), className="mt-4"),
+        dbc.Col(html.H5(children='Confusion Matrix - Testing', className="text-center"), width=7, className="mt-4"),
+        dbc.Col(html.H5(children='Evaluation Metrics', className="text-center"), width=5, className="mt-4")
         ]),
 
 
     dbc.Row([
-        dbc.Col(dcc.Graph(id='conf1'), width=5), 
-        dbc.Col(dcc.Graph(id='table1'), width=7) 
+        dbc.Col(dcc.Graph(id='conf1'), width=7), 
+        dbc.Col(dcc.Graph(id='table1'), width=5) 
         ]),
 
 ])
@@ -133,13 +134,14 @@ layout = html.Div([
 @app.callback([Output('conf1', 'figure'),
                Output('table1', 'figure')],
               [Input('classifier', 'value')])
+
 def update_graph(classifier):
     
     target_label = ['DEAD/EXPIRED', 'HOME', 'OTHERS', 'SNF']
     
     # different model
     if classifier=="dymmy":
-        df_fig = df_test.copy().iloc[:, :2]
+        df_fig = df_test.copy().iloc[:, [0,1]]
         df_fig2 = df_train.copy().iloc[:, :2]
         cm = confusion_matrix(df_fig.iloc[:,0], df_fig.iloc[:,1])
         cm_percent = (cm / cm.sum(axis=1, keepdims=True)).round(2)
@@ -170,7 +172,7 @@ def update_graph(classifier):
         
 
     # figure 1, confusion matrix
-    fig = plot_confusion_matrix(cm_percent, target_label, 'Confusion Matrix for Testing Data')
+    fig = plot_confusion_matrix(cm_percent, target_label)
     
     # figure 2, table
     fig2 = plot_df(df_fig, df_fig2)
