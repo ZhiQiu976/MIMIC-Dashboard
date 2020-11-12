@@ -140,7 +140,7 @@ def update_graph(classifier):
     target_label = ['DEAD/EXPIRED', 'HOME', 'OTHERS', 'SNF']
     
     # different model
-    if classifier=="dymmy":
+    if classifier=="dummy":
         df_fig = df_test.copy().iloc[:, [0,1]]
         df_fig2 = df_train.copy().iloc[:, :2]
         cm = confusion_matrix(df_fig.iloc[:,0], df_fig.iloc[:,1])
