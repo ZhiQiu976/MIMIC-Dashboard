@@ -154,7 +154,7 @@ layout = html.Div([
                 {'label': 'Platelet Max', 'value': 'PLATELET_max'},
                 {'label': 'Potassium Min', 'value': 'POTASSIUM_min'},
                 {'label': 'Potassium Max', 'value': 'POTASSIUM_max'},
-                {'label': 'pulse transit time Min', 'value': 'PTT_min'},
+                {'label': 'Pulse Transit Time Min', 'value': 'PTT_min'},
                 {'label': 'Pulse Transit Time Max', 'value': 'PTT_max'},
                 {'label': 'International Normalised Ratio Min', 'value': 'INR_min'},
                 {'label': 'International Normalised Ratio Max', 'value': 'INR_max'},
