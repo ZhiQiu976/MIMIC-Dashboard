@@ -5,177 +5,99 @@ import dash
 import plotly.graph_objects as go
 from dash.dependencies import Input, Output
 import pandas as pd
-import numpy as np
-
-from sklearn.metrics import confusion_matrix, f1_score, accuracy_score, precision_score, recall_score
 
 from app import app
 
-# function1
-def plot_confusion_matrix(cm, labels):
-    '''
-    Function for plotting confusion matrix (normalized).
-    
-    cm : confusion matrix list(list)
-    labels : name of the data list(str)
-    title : title for the heatmap
-    '''
-    
-    data = go.Heatmap(z=cm, y=labels, x=labels)
-    annotations = []
-    for i, row in enumerate(cm):
-        for j, value in enumerate(row):
-            annotations.append(
-                {
-                    "x": labels[i],
-                    "y": labels[j],
-                    "font": {"color": "white"},
-                    "text": str(value),
-                    "xref": "x1",
-                    "yref": "y1",
-                    "showarrow": False
-                }
-            )
-    layout = {
-        "xaxis": {"title": "Predicted value"},
-        "yaxis": {"title": "Real value"},
-        "annotations": annotations,
-        "margin": dict(t=0)
-    }
-    fig = go.Figure(data=data, layout=layout)
-    return fig
+# needed if running single page dash app instead
+#external_stylesheets = [dbc.themes.LUX]
 
-# function2
-def plot_df(df_test, df_train):
-    
-    colors = ['rgb(189, 215, 231)', 'rgb(107, 174, 214)',
-          'rgb(49, 130, 189)', 'rgb(8, 81, 156)']
-    
-    df = pd.DataFrame(columns=['Training', 'Testing'], index=['Accuracy', 'F1(weighted)',
-                                                          'Recall(weighted)', 'Precision(weighted)'])
+#app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
-    for i, df_f in enumerate([df_train, df_test]):
-        accuracy = accuracy_score(df_f.iloc[:,0], df_f.iloc[:,1])
-        f1 = f1_score(df_f.iloc[:,0], df_f.iloc[:,1], average='weighted')
-        recall = recall_score(df_f.iloc[:,0], df_f.iloc[:,1], average='weighted')
-        precision = precision_score(df_f.iloc[:,0], df_f.iloc[:,1], average='weighted', zero_division=0)
-        result = np.array([accuracy, f1, recall, precision]).round(2)
-        df.iloc[:,i] = result
-        
-    df = df.reset_index().rename(columns={'index':'Metric'})
-    df['Color'] = colors
-    
-    layout = {
-        "margin": dict(t=0)
-    }
-    
-    fig = go.Figure(data=[go.Table(
-        header=dict(values=list(['Metric', 'Training', 'Testing']),
-                    line_color='white', fill_color='white',
-                    align='left', font=dict(color='black', size=12)),
-        cells=dict(values=[df.Metric, df.Training, df.Testing],
-                   line_color=[df.Color], fill_color=[df.Color],
-                    align='left', font=dict(color='black', size=11))
-    )
-    ])
-    
-    return fig
+y_train = pd.read_csv("./Data/y_train.csv",index_col=0)
+y_test = pd.read_csv("./Data/y_test.csv",index_col=0)
 
+train_time = pd.read_csv("./Data/train_time.csv", index_col=0)
+test_time = pd.read_csv("./Data/test_time.csv", index_col=0)
 
-
-# data
-df_train = pd.read_csv('./Data/train_results_decoded.csv', index_col=0)
-df_test = pd.read_csv('./Data/test_results_decoded.csv', index_col=0)
+train_year = pd.to_datetime(train_time.DISCHTIME).dt.year
+test_year = pd.to_datetime(test_time.DISCHTIME).dt.year
+df_train = y_train.join(train_year)
+df_test = y_test.join(test_year)
 
 layout = html.Div([
     dbc.Container([
         dbc.Row([
-            dbc.Col(html.H1(children='Model Performance and Predictions for Discharge Locations'), className="mb-2")
+            dbc.Col(html.H1(children='Predictions with XgBoost'), className="mb-2")
         ]),
         dbc.Row([
-            dbc.Col(html.H6(children='Visualization of model performance, feature importance and prediction results.'), className="mb-4")
+            dbc.Col(html.H6(children='Visualization and analysis of prediction results with best model.'), className="mb-4")
         ]),
-# choose between classifiers
+# choose between cases or deaths
     dcc.Dropdown(
-        id='classifier',
+        id='train_test',
         options=[
-            {'label': 'Dummy Classifier', 'value': 'dummy'}, 
-            {'label': 'kNN', 'value': 'knn'}, 
-            {'label': 'Logistic Regression', 'value': 'logreg'},
-            {'label': 'SVM', 'value': 'svm'},
-            {'label': 'XgBoost', 'value': 'xgb'},
+            {'label': 'Training Dataset', 'value': 'train'},
+            {'label': 'Testing Dataset', 'value': 'test'},
         ],
-        value='xgb',
+        value='train',
         #multi=True,
         style={'width': '50%'}
         ),
 # for some reason, font colour remains black if using the color option
     dbc.Row([
-        dbc.Col(dbc.Card(html.H3(children='Model Performance Evaluation',
+        dbc.Col(dbc.Card(html.H3(children='Target Variable: Discharge Locations',
                                  className="text-center text-light bg-dark"), body=True, color="dark")
         , className="mt-4 mb-4")
     ]),
     dbc.Row([
-        dbc.Col(html.H5(children='Confusion Matrix - Testing', className="text-center"), width=7, className="mt-4"),
-        dbc.Col(html.H5(children='Evaluation Metrics', className="text-center"), width=5, className="mt-4")
+        dbc.Col(html.H5(children='Latest update: 7 June 2020', className="text-center"),
+                         width=4, className="mt-4"),
+        dbc.Col(html.H5(children='Daily figures since 31 Dec 2019', className="text-center"), width=8, className="mt-4"),
         ]),
 
 
     dbc.Row([
-        dbc.Col(dcc.Graph(id='conf1'), width=7), 
-        dbc.Col(dcc.Graph(id='table1'), width=5) 
+        dbc.Col(dcc.Graph(id='pie_target1'), width=5),
+        dbc.Col(dcc.Graph(id='line_target1'), width=7)
         ]),
 
 ])
 
 
 ])
+target_label = ['HOME','SNF','Other Facility','Dead/Expired']
 
-@app.callback([Output('conf1', 'figure'),
-               Output('table1', 'figure')],
-              [Input('classifier', 'value')])
+@app.callback([Output('pie_target1', 'figure'),
+               Output('line_target1', 'figure')],
+              [Input('train_test', 'value')])
+def update_graph(train_test):
 
-def update_graph(classifier):
-    
-    target_label = ['DEAD/EXPIRED', 'HOME', 'OTHERS', 'SNF']
-    
-    # different model
-    if classifier=="dummy":
-        df_fig = df_test.copy().iloc[:, [0,1]]
-        df_fig2 = df_train.copy().iloc[:, :2]
-        cm = confusion_matrix(df_fig.iloc[:,0], df_fig.iloc[:,1])
-        cm_percent = (cm / cm.sum(axis=1, keepdims=True)).round(2)
-        
-    elif classifier=="knn":
-        df_fig = df_test.copy().iloc[:, [0,2]]
-        df_fig2 = df_train.copy().iloc[:, [0,2]]
-        cm = confusion_matrix(df_fig.iloc[:,0], df_fig.iloc[:,1])
-        cm_percent = (cm / cm.sum(axis=1, keepdims=True)).round(2)
-        
-    elif classifier=="logreg":
-        df_fig = df_test.copy().iloc[:, [0,3]]
-        df_fig2 = df_train.copy().iloc[:, [0,3]]
-        cm = confusion_matrix(df_fig.iloc[:,0], df_fig.iloc[:,1])
-        cm_percent = (cm / cm.sum(axis=1, keepdims=True)).round(2)
-        
-    elif classifier=="svm":
-        df_fig = df_test.copy().iloc[:, [0,4]]
-        df_fig2 = df_train.copy().iloc[:, [0,4]]
-        cm = confusion_matrix(df_fig.iloc[:,0], df_fig.iloc[:,1])
-        cm_percent = (cm / cm.sum(axis=1, keepdims=True)).round(2)
-        
+    if train_test=="train":
+        df_fig = y_train
+        df_fig2 = df_train.groupby(['target', 'DISCHTIME'], as_index=False).size()
     else:
-        df_fig = df_test.copy().iloc[:, [0,5]]
-        df_fig2 = df_train.copy().iloc[:, [0,5]]
-        cm = confusion_matrix(df_fig.iloc[:,0], df_fig.iloc[:,1])
-        cm_percent = (cm / cm.sum(axis=1, keepdims=True)).round(2)
-        
+        df_fig = y_test
+        df_fig2 = df_test.groupby(['target', 'DISCHTIME'], as_index=False).size()
 
-    # figure 1, confusion matrix
-    fig = plot_confusion_matrix(cm_percent, target_label)
-    
-    # figure 2, table
-    fig2 = plot_df(df_fig, df_fig2)
+    fig = go.Figure(data=[
+        go.Pie(labels=target_label, values= df_fig.value_counts().values)
+        ])
+
+    fig.update_layout(paper_bgcolor='rgba(0,0,0,0)',
+                      plot_bgcolor='rgba(0,0,0,0)',
+                      template = "seaborn",
+                      margin=dict(t=0))
+    fig2 = go.Figure()
+    for i in range(1,5):
+        df_fig2_filtered = df_fig2[df_fig2.target==i]
+        fig2.add_trace(go.Scatter(x=df_fig2_filtered.DISCHTIME, y=df_fig2_filtered.iloc[:,2],
+                                 name=target_label[i-1],
+                                 mode='markers+lines'))
+
+    fig2.update_layout(yaxis_title='Number of Observations',
+                       paper_bgcolor='rgba(0,0,0,0)',
+                       plot_bgcolor='rgba(0,0,0,0)',
+                       margin=dict(t=0))
 
     return fig, fig2
 
