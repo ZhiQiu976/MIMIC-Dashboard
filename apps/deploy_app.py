@@ -10,14 +10,17 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output, State
-external_stylesheets = [dbc.themes.LUX]
+#external_stylesheets = [dbc.themes.LUX]
+
+from app import app
+
 
 def model_load(file): 
     with open(file, 'rb') as f:
         clf = joblib.load(f)   
     return clf
 
-model = model_load("gbm_gamma.pickle")
+model = model_load("./Data/gbm_gamma.pickle")
 
 val = [ 93.29166978, 119.24813733,  60.74150063,  37.50735481,
         18.67282058, 140.62989954,   5.03019082,  52.80626612,
@@ -74,10 +77,10 @@ tp = pd.DataFrame(val).transpose()
 tp.columns=col
 
 
-server = flask.Flask(__name__)
-app = dash.Dash(__name__, server=server,external_stylesheets=external_stylesheets)
+#server = flask.Flask(__name__)
+#app = dash.Dash(__name__, server=server,external_stylesheets=external_stylesheets)
 
-app.layout = html.Div([
+layout = html.Div([
     dbc.Container([
         dbc.Row([
             dbc.Col(html.H1("Real Time Prediction Serverless App"), className="mb-2")
@@ -219,5 +222,5 @@ def predict(n_clicks, sl, sw, pl, pw, var0,var1,var2,var3,var4,var5):
     
     
 
-if __name__ == '__main__':
-    app.run_server(debug=True)
+# if __name__ == '__main__':
+#     app.run_server(debug=True)

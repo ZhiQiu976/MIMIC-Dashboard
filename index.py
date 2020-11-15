@@ -6,7 +6,7 @@ import dash
 
 from app import app
 # import all pages in the app
-from apps import home, EDA, calendar, Models
+from apps import home, EDA, calendar, Models, deploy_app
 
 #external_stylesheets = [dbc.themes.LUX]
 #app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
@@ -26,6 +26,9 @@ dropdown = dbc.DropdownMenu(
                              ),
         dbc.DropdownMenuItem("Calendar",
                                     href="/calendar"
+                                    ),
+        dbc.DropdownMenuItem("Online ML",
+                                    href="/deploy_app"
                                     )
     ],
     nav = True,
@@ -93,6 +96,8 @@ def display_page(pathname):
         return Models.layout
     elif pathname == '/calendar':
         return calendar.layout
+    elif pathname == '/deploy_app':
+        return deploy_app.layout
     else:
         return home.layout
 
