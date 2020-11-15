@@ -87,17 +87,11 @@ def plot_df(df_test, df_train):
     
     return fig
 
-# function 3
-def plot_imp_single(df, n):
+# helper function for graph layput
+def size_adjustment(n):
     '''
-    Function for plot feature importance for a single classifier.
-    
-    df: input feature importance dataframe (dataframe)
-    n : number of features to display (float)
+    Helper function for controlling graph size.
     '''
-    
-    df_new = df.sort_values(by = ['importance'], ascending=False)[:n]
-    df_new_ = df_new.sort_values(by = ['importance'])
     
     if n is None:
         best = dict(height=2000, width=1000)
@@ -121,6 +115,22 @@ def plot_imp_single(df, n):
             best = dict(height=1850, width=1000)
         else:
             best = dict(height=2000, width=1000)
+            
+    return best
+
+# function 3
+def plot_imp_single(df, n):
+    '''
+    Function for plot feature importance for a single classifier.
+    
+    df: input feature importance dataframe (dataframe)
+    n : number of features to display (float)
+    '''
+    
+    df_new = df.sort_values(by = ['importance'], ascending=False)[:n]
+    df_new_ = df_new.sort_values(by = ['importance'])
+    
+    best = size_adjustment(n)
     
     layout = dict(
         title='Barplot of Feature Importance with top {} features'.format(n),
@@ -146,6 +156,41 @@ def plot_imp_single(df, n):
 
     return fig
 
+# function 4
+def plot_multi(df, n):
+    '''
+    Function for plot feature importance for different classes in a single classifier.
+    Final ranking is computed by summing up absolute values of coefficient for all classes.
+    
+    df: input feature importance dataframe (dataframe)
+    n : number of features to display (float)
+    '''
+    
+    best = size_adjustment(n)
+    
+    df['sum_importance'] = abs(df.home)+abs(df.snf)+abs(df.others)+abs(df.dead)
+    df_new = df.sort_values(by = ['sum_importance'], ascending=False)[:n]
+    df_new_ = df_new.sort_values(by = ['sum_importance'])
+
+    fig = go.Figure()
+    fig.add_trace(go.Bar(name='Home',
+                         y=[i for i in df_new_.features],
+                         x=[i for i in df_new_.home], orientation='h'))
+    fig.add_trace(go.Bar(name='SNF', 
+                         y=[i for i in df_new_.features], 
+                         x=[i for i in df_new_.snf], orientation='h'))
+    fig.add_trace(go.Bar(name='Others', 
+                         y=[i for i in df_new_.features],
+                         x=[i for i in df_new_.others], orientation='h'))
+    fig.add_trace(go.Bar(name='Dead/Expired', 
+                         y=[i for i in df_new_.features], 
+                         x=[i for i in df_new_.dead], orientation='h'))
+
+    fig.update_layout(barmode='relative', 
+                      title='Barplot of Feature Importance with top {} features (ranked by sum of absolute values)'.format(n), 
+                      **best)
+
+    return fig
 
 
 # data
@@ -318,17 +363,16 @@ def update_graph2(classifier2, num_of_feature):
     
     # different model
     if classifier2=="logreg":
-        df_imp = pd.read_csv('./Data/xgb_importance.csv', index_col=0)
+        df_imp = pd.read_csv('./Data/logreg_importance.csv', index_col=0)
+        fig3 = plot_multi(df_imp, num_of_feature)
         
     elif classifier2=='xgb':
         df_imp = pd.read_csv('./Data/xgb_importance.csv', index_col=0)
+        fig3 = plot_imp_single(df_imp, num_of_feature)
         
     elif classifier2=='rf':
         df_imp = pd.read_csv('./Data/rf_importance.csv', index_col=0)
-        
-    
-    # figure 3, importance
-    fig3 = plot_imp_single(df_imp, num_of_feature)
+        fig3 = plot_imp_single(df_imp, num_of_feature)
 
     return fig3
 
