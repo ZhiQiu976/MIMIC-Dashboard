@@ -12,9 +12,6 @@ from sklearn.metrics import confusion_matrix, f1_score, accuracy_score, precisio
 
 from app import app
 
-
-
-
 # function1
 def plot_confusion_matrix(cm, labels):
     '''

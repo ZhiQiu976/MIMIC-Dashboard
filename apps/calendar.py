@@ -124,7 +124,7 @@ def update_graph(year, dischloc, month):
         for rows_number, rows in enumerate(days1):
             for time_index, time in enumerate(rows):
                 color_array[rows_number][time_index] = 0
-                textinfo[rows_number][time_index] = 'No patients being discharged to ' + 'HOME'
+                textinfo[rows_number][time_index] = 'No patients being discharged to ' + dischloc
     else:
         for rows_number, rows in enumerate(days1):
             for time_index, time in enumerate(rows):
@@ -136,11 +136,11 @@ def update_graph(year, dischloc, month):
                             break
                     else:
                         color_array[rows_number][time_index] = 0
-                        textinfo[rows_number][time_index] = 'No patients being discharged to ' + 'HOME'
+                        textinfo[rows_number][time_index] = 'No patients being discharged to ' + dischloc
 
     ## Z values indicate the color of date'cells.
     z = color_array[::-1]
-
+    ann = days[::-1]
     textinfo = textinfo[::-1]
     if day_numbers==0:
         colorscale = [[0.0, 'rgb(255,255,255)'],
@@ -150,7 +150,7 @@ def update_graph(year, dischloc, month):
                       [.5, 'rgb(153, 255, 204)'], [0.75, 'rgb(179, 217, 255)'],
                       [1.0, 'rgb(240, 179, 255)']]
 
-    fig = go.Figure(data= ff.create_annotated_heatmap(z, x=x, y=y, text=textinfo, hoverinfo='text', colorscale=colorscale))
+    fig = go.Figure(data= ff.create_annotated_heatmap(z, x=x, y=y, text=textinfo, hoverinfo='text',annotation_text=ann,colorscale=colorscale))
     fig.update_layout(
         title={
             'text': months[int(month)-1],

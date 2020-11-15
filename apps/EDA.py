@@ -189,34 +189,33 @@ layout = html.Div([
     dbc.Row([
         dbc.Col(dcc.Graph(id='table_vital'))
     ]),
-
-    ]),
+    dcc.Graph(id='hist_vital'),
 
     dbc.Row([
-        dbc.Col(dcc.Graph(id='cor_vital'), width=5),
-        dbc.Col(dcc.Graph(id='hist_vital'), width=7)
+        dbc.Col(dbc.Card(html.H3(children='Correlation Plot',
+                                 className="text-center text-light bg-dark"), body=True, color="dark")
+        , className="mt-4 mb-4")
     ]),
+
+    dcc.Graph(id='cor_vital')
+]),
 ])
 target_label = ['HOME','SNF','Other Facility','Dead/Expired']
-column_names = ['Hear Rate','Sys BP', 'Dias BP', 'Temperature', 'Respiratory Rate', 'Glucose', 'Anion Gap', 'Albumin', 'Bands', 'Sodium', 'BUN', 'White Blood Count']
+column_names = ['Hear Rate','Sys BP', 'Dias BP', 'Temperature', 'Respiratory Rate', 'Glucose', 'Anion Gap', 'Albumin', 'Bands', 'Sodium', 'BUN', 'White Blood Count', 'Discharge Locations']
 
 @app.callback([Output('pie_target', 'figure'),
                Output('line_target', 'figure'),
-               Output('cor_vital', 'figure'),
                Output('hist_vital', 'figure')],
               [Input('train_test', 'value'),
                Input('vitals', 'value')])
 def update_graph(train_test, vital_column):
-
-    if train_test=="train":
+    if train_test == "train":
         df_fig = y_train
         df_fig2 = df_train.groupby(['target', 'DISCHTIME'], as_index=False).size()
-        df_fig3 = X_train.loc[:,vitals_label+labs_label].corr()
         df_fig4 = X_train.join(y_train)
     else:
         df_fig = y_test
         df_fig2 = df_test.groupby(['target', 'DISCHTIME'], as_index=False).size()
-        df_fig3 = X_test.loc[:,vitals_label+labs_label].corr()
         df_fig4 = X_test.join(y_test)
 
     fig = go.Figure(data=[
@@ -239,15 +238,23 @@ def update_graph(train_test, vital_column):
                        plot_bgcolor='rgba(0,0,0,0)',
                        margin=dict(t=0))
 
-    fig3 = go.Figure(data=go.Heatmap(z=df_fig3, x=column_names, y=column_names, colorscale='Viridis'))
-
     fig4 = go.Figure()
     for i in range(1, 5, 1):
         df4_filtered = df_fig4[df_fig4.target == i]
         df4_filtered = df4_filtered[df4_filtered.loc[:,vital_column] != df4_filtered.loc[:,vital_column].mode().values[0]]
         fig4.add_trace(go.Histogram(x=df4_filtered.loc[:,vital_column], opacity=0.4, name=target_label[i - 1]))
 
-    return fig, fig2, fig3, fig4
+    return fig, fig2, fig4
+
+@app.callback(Output('cor_vital', 'figure'),
+              [Input('train_test', 'value')])
+def update_correlation(train_test):
+    if train_test == "train":
+        df_fig3 = X_train.loc[:, vitals_label + labs_label].join(y_train).corr()
+    else:
+        df_fig3 = X_test.loc[:, vitals_label + labs_label].join(y_test).corr()
+    fig3 = go.Figure(data=go.Heatmap(z=df_fig3, x=column_names, y=column_names, colorscale='Viridis'))
+    return fig3
 
 @app.callback([Output('table_dm', 'figure'),
                Output('bar_dm', 'figure')],
