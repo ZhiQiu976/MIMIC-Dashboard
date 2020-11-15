@@ -57,135 +57,6 @@ layout = html.Div([
         dbc.Row([
             dbc.Col(html.H6(children='Visualising distribution and correlation of our data.'), className="mb-4")
         ]),
-        # choose between cases or deaths
-        dcc.Dropdown(
-            id='train_test',
-            options=[
-                {'label': 'Training Dataset', 'value': 'train'},
-                {'label': 'Testing Dataset', 'value': 'test'},
-            ],
-            value='train',
-            # multi=True,
-            style={'width': '50%'}
-        ),
-        # for some reason, font colour remains black if using the color option
-        dbc.Row([
-            dbc.Col(dbc.Card(html.H3(children='Target Variable: Discharge Locations',
-                                     className="text-center text-light bg-dark"), body=True, color="dark")
-                    , className="mt-4 mb-4")
-        ]),
-        dbc.Row([
-            dbc.Col(html.H5(children='Latest update: 7 June 2020', className="text-center"),
-                    width=4, className="mt-4"),
-            dbc.Col(html.H5(children='Daily figures since 31 Dec 2019', className="text-center"), width=8,
-                    className="mt-4"),
-        ]),
-
-        dbc.Row([
-            dbc.Col(dcc.Graph(id='pie_target'), width=5),
-            dbc.Col(dcc.Graph(id='line_target'), width=7)
-        ]),
-
-        # add tables and visualizations of predictors
-        dbc.Row([
-            dbc.Col(dbc.Card(html.H3(children='Summary statistics of predictors',
-                                     className="text-center text-light bg-dark"), body=True, color="dark")
-                    , className="mt-4 mb-4")
-        ]),
-
-        # choose among different demographic predictors
-        dcc.Dropdown(
-            id='demographics',
-            options=[
-                {'label': 'Admission Type', 'value': 'ADMISSION_TYPE'},
-                {'label': 'Admission Location', 'value': 'ADMISSION_LOCATION'},
-                {'label': 'Insurance', 'value': 'INSURANCE'},
-                {'label': 'Religion', 'value': 'RELIGION'},
-                {'label': 'Gender', 'value': 'GENDER'},
-                {'label': 'Ethnicity', 'value': 'ETHNICITY'},
-                {'label': 'Diagnosis', 'value': 'DIAGNOSIS'},
-            ],
-            value='ADMISSION_TYPE',
-            # multi=True,
-            style={'width': '50%'},
-            className="mt-4"
-        ),
-
-        dbc.Row([
-            dbc.Col(html.H5(children='Demographics', className="text-center"),
-                    className="mt-4"),
-        ]),
-
-        dbc.Row([
-            dbc.Col(dcc.Graph(id='table_dm'))
-        ]),
-
-        dbc.Row([
-            dbc.Col(html.H5(children='Stacked bar plot', className="text-center"),
-                    className="mt-4"),
-        ]),
-
-        dbc.Row([
-            dbc.Col(dcc.Graph(id='bar_dm'), className="text-center")
-        ]),
-
-        dcc.Dropdown(
-            id='vitals',
-            options=[
-                {'label': 'HeartRate Mean', 'value': 'HeartRate_Mean'},
-                {'label': 'SysBP Mean', 'value': 'SysBP_Mean'},
-                {'label': 'DiasBP Mean', 'value': 'DiasBP_Mean'},
-                {'label': 'TempC Max', 'value': 'TempC_Max'},
-                {'label': 'RespRate Mean', 'value': 'RespRate_Mean'},
-                {'label': 'Glucose Mean', 'value': 'Glucose_Mean'},
-                {'label': 'ICU:Length of stay', 'value': 'ICU_LOS'},
-                {'label': 'Age', 'value': 'age'},
-                {'label': 'ANIONGAP Min', 'value': 'ANIONGAP_min'},
-                {'label': 'ANIONGAP Max', 'value': 'ANIONGAP_max'},
-                {'label': 'Albumin Min', 'value': 'ALBUMIN_min'},
-                {'label': 'Albumin Max', 'value': 'ALBUMIN_max'},
-                {'label': 'Bands Min', 'value': 'BANDS_min'},
-                {'label': 'Bands Max', 'value': 'BANDS_max'},
-                {'label': 'SysBP Mean', 'value': 'SysBP_Mean'},
-                {'label': 'Bicarbonate Max', 'value': 'BICARBONATE_min'},
-                {'label': 'Bicarbonate Max', 'value': 'BICARBONATE_max'},
-                {'label': 'Bilirubin Max', 'value': 'BILIRUBIN_min'},
-                {'label': 'Bilirubin Max', 'value': 'BILIRUBIN_max'},
-                {'label': 'Cheatitne Min', 'value': 'CREATININE_min'},
-                {'label': 'Cheatitne Max', 'value': 'CREATININE_max'},
-                {'label': 'Chloride Min', 'value': 'CHLORIDE_min'},
-                {'label': 'Chloride Max', 'value': 'CHLORIDE_max'},
-                {'label': 'Glucose Min', 'value': 'GLUCOSE_min'},
-                {'label': 'Glucose Max', 'value': 'GLUCOSE_max'},
-                {'label': 'Hematocrit Min', 'value': 'HEMATOCRIT_min'},
-                {'label': 'Hematocrit Max', 'value': 'HEMATOCRIT_max'},
-                {'label': 'Hemoglobin Min', 'value': 'HEMOGLOBIN_min'},
-                {'label': 'Hemoglobin Max', 'value': 'HEMOGLOBIN_max'},
-                {'label': 'Lactate Min', 'value': 'LACTATE_min'},
-                {'label': 'Lactate Max', 'value': 'LACTATE_max'},
-                {'label': 'Platelet Min', 'value': 'PLATELET_min'},
-                {'label': 'Platelet Max', 'value': 'PLATELET_max'},
-                {'label': 'Potassium Min', 'value': 'POTASSIUM_min'},
-                {'label': 'Potassium Max', 'value': 'POTASSIUM_max'},
-                {'label': 'Pulse Transit Time Min', 'value': 'PTT_min'},
-                {'label': 'Pulse Transit Time Max', 'value': 'PTT_max'},
-                {'label': 'International Normalised Ratio Min', 'value': 'INR_min'},
-                {'label': 'International Normalised Ratio Max', 'value': 'INR_max'},
-                {'label': 'Prothrombin Time Min', 'value': 'PT_min'},
-                {'label': 'Prothrombin Time Max', 'value': 'PT_max'},
-                {'label': 'Sodium Min', 'value': 'SODIUM_min'},
-                {'label': 'Sodium Max', 'value': 'SODIUM_max'},
-                {'label': 'Blood urea nitrogen Min', 'value': 'BUN_min'},
-                {'label': 'Blood urea nitrogen Max', 'value': 'BUN_max'},
-                {'label': 'White blood cells Min', 'value': 'WBC_min'},
-                {'label': 'White blood cells Max', 'value': 'WBC_max'},
-                {'label': 'Emergency department stay', 'value': 'EDstay'},
-            ],
-            value='HeartRate_Mean',
-            # multi=True,
-            style={'width': '50%'},
-            className="mt-4"
-=======
 # choose between cases or deaths
     dcc.Dropdown(
         id='train_test',
@@ -196,7 +67,6 @@ layout = html.Div([
         value='train',
         #multi=True,
         style={'width': '50%'}
->>>>>>> main
         ),
 # for some reason, font colour remains black if using the color option
     dbc.Row([
@@ -264,16 +134,16 @@ layout = html.Div([
             {'label': 'Glucose Mean', 'value': 'Glucose_Mean'},
             {'label': 'ICU:Length of stay', 'value': 'ICU_LOS'},
             {'label': 'Age', 'value': 'age'},
-            {'label': 'ANIONGAP Min', 'value': 'ANIONGAP_min'},
-            {'label': 'ANIONGAP Max', 'value': 'ANIONGAP_max'},
+            {'label': 'Aniongap Min', 'value': 'ANIONGAP_min'},
+            {'label': 'Aniongap Max', 'value': 'ANIONGAP_max'},
             {'label': 'Albumin Min', 'value': 'ALBUMIN_min'},
             {'label': 'Albumin Max', 'value': 'ALBUMIN_max'},
             {'label': 'Bands Min', 'value': 'BANDS_min'},
             {'label': 'Bands Max', 'value': 'BANDS_max'},
             {'label': 'SysBP Mean', 'value': 'SysBP_Mean'},
-            {'label': 'Bicarbonate Max', 'value': 'BICARBONATE_min'},
+            {'label': 'Bicarbonate Min', 'value': 'BICARBONATE_min'},
             {'label': 'Bicarbonate Max', 'value': 'BICARBONATE_max'},
-            {'label': 'Bilirubin Max', 'value': 'BILIRUBIN_min'},
+            {'label': 'Bilirubin Min', 'value': 'BILIRUBIN_min'},
             {'label': 'Bilirubin Max', 'value': 'BILIRUBIN_max'},
             {'label': 'Cheatitne Min', 'value': 'CREATININE_min'},
             {'label': 'Cheatitne Max', 'value': 'CREATININE_max'},
@@ -412,8 +282,7 @@ def update_table_dm(demographics, train_test):
     fig2 = px.histogram(dm_y_select, y=demographics, color="target", template="simple_white",
                         labels={"target": ""})
 
-    fig2.update_layout(yaxis_title='Number of Observations',
-                       paper_bgcolor='rgba(0,0,0,0)',
+    fig2.update_layout(paper_bgcolor='rgba(0,0,0,0)',
                        plot_bgcolor='rgba(0,0,0,0)',
                        template="seaborn",
                        margin=dict(t=0))
