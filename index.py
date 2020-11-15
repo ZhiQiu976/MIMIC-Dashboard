@@ -6,7 +6,7 @@ import dash
 
 from app import app
 # import all pages in the app
-from apps import home, EDA, Models, Predictions
+from apps import home, EDA, calendar, Models
 
 #external_stylesheets = [dbc.themes.LUX]
 #app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
@@ -22,11 +22,11 @@ dropdown = dbc.DropdownMenu(
                              href="/EDA"
                              ),
         dbc.DropdownMenuItem("Models",
-                            href="/Models"
-                            ),
-        dbc.DropdownMenuItem("Predictions",
-                            href="/Predictions"
-                            )
+                             href="/Models"
+                             ),
+        dbc.DropdownMenuItem("Calendar",
+                                    href="/calendar"
+                                    )
     ],
     nav = True,
     in_navbar = True,
@@ -91,8 +91,8 @@ def display_page(pathname):
         return EDA.layout
     elif pathname == '/Models':
         return Models.layout
-    elif pathname == '/Predictions':
-        return Predictions.layout
+    elif pathname == '/calendar':
+        return calendar.layout
     else:
         return home.layout
 
