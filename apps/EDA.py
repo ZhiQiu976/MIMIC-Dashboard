@@ -134,7 +134,7 @@ layout = html.Div([
                 {'label': 'Bands Min', 'value': 'BANDS_min'},
                 {'label': 'Bands Max', 'value': 'BANDS_max'},
                 {'label': 'SysBP Mean', 'value': 'SysBP_Mean'},
-                {'label': 'Bicarbonate Max', 'value': 'BICARBONATE_min'},
+                {'label': 'Bicarbonate Min', 'value': 'BICARBONATE_min'},
                 {'label': 'Bicarbonate Max', 'value': 'BICARBONATE_max'},
                 {'label': 'Bilirubin Max', 'value': 'BILIRUBIN_min'},
                 {'label': 'Bilirubin Max', 'value': 'BILIRUBIN_max'},
