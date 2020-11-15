@@ -3,6 +3,7 @@ import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash
 import plotly.graph_objects as go
+import plotly.figure_factory as ff
 from dash.dependencies import Input, Output
 import pandas as pd
 import numpy as np
@@ -66,21 +67,23 @@ def plot_df(df_test, df_train):
         df.iloc[:,i] = result
         
     df = df.reset_index().rename(columns={'index':'Metric'})
-    df['Color'] = colors
+#     df['Color'] = colors
     
-    layout = {
-        "margin": dict(t=0)
-    }
+#     layout = {
+#         "margin": dict(t=0)
+#     }
     
-    fig = go.Figure(data=[go.Table(
-        header=dict(values=list(['Metric', 'Training', 'Testing']),
-                    line_color='white', fill_color='white',
-                    align='left', font=dict(color='black', size=12)),
-        cells=dict(values=[df.Metric, df.Training, df.Testing],
-                   line_color=[df.Color], fill_color=[df.Color],
-                    align='left', font=dict(color='black', size=11))
-    )
-    ])
+#     fig = go.Figure(data=[go.Table(
+#         header=dict(values=list(['Metric', 'Training', 'Testing']),
+#                     line_color='white', fill_color='white',
+#                     align='left', font=dict(color='black', size=12)),
+#         cells=dict(values=[df.Metric, df.Training, df.Testing],
+#                    line_color=[df.Color], fill_color=[df.Color],
+#                     align='left', font=dict(color='black', size=11))
+#     )
+#     ])
+    
+    fig = ff.create_table(df)
     
     return fig
 
