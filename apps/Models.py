@@ -55,8 +55,8 @@ def plot_df(df_test, df_train):
     colors = ['rgb(189, 215, 231)', 'rgb(107, 174, 214)',
           'rgb(49, 130, 189)', 'rgb(8, 81, 156)']
     
-    df = pd.DataFrame(columns=['Training', 'Testing'], index=['Accuracy', 'F1(weighted)',
-                                                          'Recall(weighted)', 'Precision(weighted)'])
+    df = pd.DataFrame(columns=['Training', 'Testing'], index=['Accuracy', 'F1',
+                                                          'Recall', 'Precision'])
 
     for i, df_f in enumerate([df_train, df_test]):
         accuracy = accuracy_score(df_f.iloc[:,0], df_f.iloc[:,1])
@@ -156,15 +156,23 @@ df_test = pd.read_csv('./Data/test_results_decoded.csv', index_col=0)
 layout = html.Div([
     dbc.Container([
         dbc.Row([
-            dbc.Col(html.H1(children='Model Performance Evaluation'), className="mb-2")
+            dbc.Col(html.H1(children='Model Evaluation'), className="mb-2")
         ]),
         dbc.Row([
-            dbc.Col(html.H6(children='Visualization of model performance and feature importance.'), className="mb-4")
+            dbc.Col(html.H6(children='Visualization of model performance and feature importance for Target Variable - Discharge Locations.'), className="mb-4")
         ]),
         
-     # choose between classifiers
-     html.Label(["Select a model: "]), 
-                
+        
+    # for some reason, font colour remains black if using the color option
+    dbc.Row([
+        dbc.Col(dbc.Card(html.H3(children='Model Performance',
+                                 className="text-center text-light bg-dark"), body=True, color="dark")
+        , className="mt-4 mb-4")
+    ]),
+        
+        
+    # choose between classifiers
+    html.Label(["Select a model: "]),        
      dcc.Dropdown(
         id='classifier',
         options=[
@@ -178,14 +186,9 @@ layout = html.Div([
         value='xgb',
         #multi=True,
         #style={'width': '50%'}
-        ), 
+        ),    
+   
         
-    # for some reason, font colour remains black if using the color option
-    dbc.Row([
-        dbc.Col(dbc.Card(html.H3(children='Target Variable: Discharge Locations',
-                                 className="text-center text-light bg-dark"), body=True, color="dark")
-        , className="mt-4 mb-4")
-    ]),
     dbc.Row([
         dbc.Col(html.H5(children='Confusion Matrix - Testing', className="text-center"), width=7, className="mt-4"),
         dbc.Col(html.H5(children='Evaluation Metrics', className="text-center"), width=5, className="mt-4")
@@ -204,13 +207,39 @@ layout = html.Div([
         , className="mt-4 mb-4")
     ]),    
     
+        
+#     dcc.Input(
+#             id="num_of_feature", type="number", placeholder='Select or enter...',
+#             min=1, max=84,
+#         ),
+     dbc.FormGroup(
+        [
+            dbc.Label("Classifiers with built-in importance ranking:"),
+            dbc.RadioItems(
+                id='classifier2',
+                options=[
+                    {'label': 'Logistic Regression', 'value': 'logreg'},
+                    {'label': 'XgBoost', 'value': 'xgb'},
+                    {'label': 'Random Forest', 'value': 'rf'},
+                ],
+                value='xgb',
+                inline=True
+            ),
+        ]
+    ),
+        
+    html.Br(),
+        
     html.Label(["Number of Top features: (minimum 1, maximum 84)"]),
     html.Br(),
         
-    dcc.Input(
-            id="num_of_feature", type="number", placeholder='Select or enter...',
-            min=1, max=84,
-        ),
+    dcc.Slider(
+        id="num_of_feature",
+        min=1,
+        max=84,
+        #marks={i: '{}'.format(i) for i in range(84)},
+        value=10,
+    ),  
     
     dbc.Row([
         dbc.Col(dcc.Graph(id='imp1'), width=12)
@@ -223,11 +252,10 @@ layout = html.Div([
 ])
 
 @app.callback([Output('conf1', 'figure'),
-               Output('table1', 'figure'),
-               Output('imp1', 'figure')],
-              [Input('classifier', 'value'), Input('num_of_feature', 'value')])
+               Output('table1', 'figure')],
+              [Input('classifier', 'value')])
 
-def update_graph(classifier, num_of_feature):
+def update_graph1(classifier):
     
     target_label = ['DEAD/EXPIRED', 'HOME', 'OTHERS', 'SNF']
     
@@ -276,13 +304,33 @@ def update_graph(classifier, num_of_feature):
     
     # figure 2, table
     fig2 = plot_df(df_fig, df_fig2)
+
+    return fig, fig2
+
+
+
+@app.callback(Output('imp1', 'figure'),
+              [Input('classifier2', 'value'), Input('num_of_feature', 'value')])
+
+def update_graph2(classifier2, num_of_feature):
+    
+    target_label = ['DEAD/EXPIRED', 'HOME', 'OTHERS', 'SNF']
+    
+    # different model
+    if classifier2=="logreg":
+        df_imp = pd.read_csv('./Data/xgb_importance.csv', index_col=0)
+        
+    elif classifier2=='xgb':
+        df_imp = pd.read_csv('./Data/xgb_importance.csv', index_col=0)
+        
+    elif classifier2=='rf':
+        df_imp = pd.read_csv('./Data/rf_importance.csv', index_col=0)
+        
     
     # figure 3, importance
     fig3 = plot_imp_single(df_imp, num_of_feature)
 
-    return fig, fig2, fig3
-
-
+    return fig3
 
 
 
