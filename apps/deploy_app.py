@@ -108,18 +108,18 @@ layout = html.Div([
     dbc.Input(id="HeartRate_Mean",
               type="number", 
               placeholder="Mean heart rate: positive input",
-              min=0),
+              min=0,step = 0.001,style = {"float":"left"}),
     
     #dcc
     dbc.Input(id="Glucose_Mean",
               type="number", 
               placeholder="Mean glucose level: positive input",
-              min=0),
+              min=0,step = 0.001,style = {"float":"left"}),
 
     dbc.Input(id="TempC_Max",
               type="number", 
               placeholder="Mean temperature: positive input",
-              min=0),
+              min=0,step = 0.001,style = {"float":"left"}),
 
 
     dbc.Input(id="INSURANCE_Medicare",
