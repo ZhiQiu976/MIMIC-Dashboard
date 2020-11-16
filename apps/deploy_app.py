@@ -19,7 +19,7 @@ def model_load(file):
         clf = joblib.load(f)   
     return clf
 
-model = model_load("gbm_gamma.pickle")
+model = model_load("./Data/gbm_gamma.pickle")
 
 val = [ 93.29166978, 119.24813733,  60.74150063,  37.50735481,
         18.67282058, 140.62989954,   5.03019082,  52.80626612,
@@ -79,17 +79,12 @@ tp.columns=col
 # server = flask.Flask(__name__)
 # app = dash.Dash(__name__, server=server,external_stylesheets=external_stylesheets)
 
-app.layout = html.Div([
+layout = html.Div([
     dbc.Container([
         dbc.Row([
             dbc.Col(html.H1("Real Time Prediction Serverless App"), className="mb-2")
 
     ]) ]),
-    # html.Div(children="Xu, Zhenhui - Master of Biostatistics",className="text-center"),
-    # html.Div(children="Feng, Yuan - Master of Interdisciplinary Data Sciencse", className="text-center"),
-    # html.Div(children="Qiu, Zhi (Heather) - Master of Statistical Science", className="text-center"),
-    # html.Div(children="Han, Mengyue - Master of Biostatistics", className="text-center"),
-    # html.Hr(),
 
     dbc.Container([
         dbc.Row([
@@ -101,48 +96,59 @@ app.layout = html.Div([
 
     dbc.Input(id="Age",
               type="number", 
-              placeholder="Age"),
+              placeholder="Age: from 0 to 100",
+              min=0, max=100),
     
     dbc.Input(id="Gender",
               type="number", 
-              placeholder="Binary Input: 1 = male, 0 = female"),
+              placeholder="Binary Input: 1 = male, 0 = female",
+              min=0, max=1),
     
     
     dbc.Input(id="HeartRate_Mean",
               type="number", 
-              placeholder="Mean heart rate"),
+              placeholder="Mean heart rate: positive input",
+              min=0),
     
     #dcc
     dbc.Input(id="Glucose_Mean",
               type="number", 
-              placeholder="Mean glucose level"),
+              placeholder="Mean glucose level: positive input",
+              min=0),
 
     dbc.Input(id="TempC_Max",
               type="number", 
-              placeholder="Mean temperature"),
+              placeholder="Mean temperature: positive input",
+              min=0),
 
 
     dbc.Input(id="INSURANCE_Medicare",
               type="number", 
-              placeholder="inary Input: Insurance medicare = 1 else 0"),
-
-
-    dbc.Input(id="ADMISSION_TYPE_EMERGENCY",
-              type="number", 
-              placeholder="Binary Input: emergency = 1 else = 0"),
-
-
-    dbc.Input(id="ADMISSION_LOCATION",
-              type="number", 
-              placeholder="Binary Input: referral = 1 else = 0"),
+              placeholder="Binary Input: if insurance type is 'medicare' then 1 else 0",
+              min=0, max=1),
 
     dbc.Input(id="INSURANCE_Private",
               type="number", 
-              placeholder="Binary Input: private insurance = 1 else = 0"),
+              placeholder="Binary Input: if insurance type is 'private' then 1 else 0",
+              min=0, max=1),
 
+    
+    dbc.Input(id="ADMISSION_TYPE_EMERGENCY",
+              type="number", 
+              placeholder="Binary Input: if admitted as 'emergency' then 1 else 0",
+              min=0, max=1),
+
+    
+    dbc.Input(id="ADMISSION_LOCATION",
+              type="number", 
+              placeholder="Binary Input: if admitted via referral then 1 else 0",
+              min=0, max=1),
+
+    
     dbc.Input(id="ADMISSION_TYPE_NEWBORN",
               type="number", 
-              placeholder="Binary Input: newborn = 1 else = 0"),
+              placeholder="Binary Input: if adimitted as 'newborn' then 1 else 0",
+              min=0, max=1),
 
     dbc.Row(dbc.Card(children=[html.H3(children='',
                                                className="text-center"),
