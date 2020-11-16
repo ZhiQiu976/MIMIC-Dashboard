@@ -94,6 +94,35 @@ layout = html.Div([
         , className="mt-4 mb-4")
     ]) ]),
 
+    
+    dbc.Input(id="INSURANCE_Medicare",
+              type="number", 
+              placeholder="Binary Input: if insurance type is 'medicare' then 1 else 0",
+              min=0, max=1),
+
+
+    
+    dbc.Input(id="ADMISSION_TYPE_EMERGENCY",
+              type="number", 
+              placeholder="Binary Input: if admitted as 'emergency' then 1 else 0",
+              min=0, max=1),
+
+    
+    dbc.Input(id="ADMISSION_LOCATION",
+              type="number", 
+              placeholder="Binary Input: if previous location is 'PHYS REFERRAL/NORMAL DELI' then 1 else 0",
+              min=0, max=1),
+    
+    dbc.Input(id="INSURANCE_Private",
+              type="number", 
+              placeholder="Binary Input: if insurance type is 'Private' then 1 else 0",
+              min=0, max=1),
+    
+    dbc.Input(id="ADMISSION_TYPE_NEWBORN",
+              type="number", 
+              placeholder="Binary Input: if patient’s birth information is recorded then 1 else 0",
+              min=0, max=1),
+    
     dbc.Input(id="Age",
               type="number", 
               placeholder="Age: from 0 to 100",
@@ -120,35 +149,6 @@ layout = html.Div([
               type="number", 
               placeholder="Mean temperature: positive input",
               min=0,step = 0.001,style = {"float":"left"}),
-
-
-    dbc.Input(id="INSURANCE_Medicare",
-              type="number", 
-              placeholder="Binary Input: if insurance type is 'medicare' then 1 else 0",
-              min=0, max=1),
-
-    dbc.Input(id="INSURANCE_Private",
-              type="number", 
-              placeholder="Binary Input: if insurance type is 'private' then 1 else 0",
-              min=0, max=1),
-
-    
-    dbc.Input(id="ADMISSION_TYPE_EMERGENCY",
-              type="number", 
-              placeholder="Binary Input: if admitted as 'emergency' then 1 else 0",
-              min=0, max=1),
-
-    
-    dbc.Input(id="ADMISSION_LOCATION",
-              type="number", 
-              placeholder="Binary Input: if admitted via referral then 1 else 0",
-              min=0, max=1),
-
-    
-    dbc.Input(id="ADMISSION_TYPE_NEWBORN",
-              type="number", 
-              placeholder="Binary Input: if adimitted as 'newborn' then 1 else 0",
-              min=0, max=1),
 
     dbc.Row(dbc.Card(children=[html.H3(children='',
                                                className="text-center"),
