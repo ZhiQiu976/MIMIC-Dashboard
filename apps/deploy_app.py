@@ -120,7 +120,7 @@ layout = html.Div([
     
     dbc.Input(id="ADMISSION_TYPE_NEWBORN",
               type="number", 
-              placeholder="Binary Input: if patient’s birth information is recorded then 1 else 0",
+              placeholder="Binary Input: if the patient is born here then 1 else 0",
               min=0, max=1),
     
     dbc.Input(id="Age",
