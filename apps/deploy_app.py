@@ -89,66 +89,90 @@ layout = html.Div([
     dbc.Container([
         dbc.Row([
 
-                    dbc.Col(dbc.Card(html.H3(children='Feature Input',
+                    dbc.Col(dbc.Card(html.H3(children='Input Features',
                                  className="text-center text-light bg-dark"), body=True, color="dark")
         , className="mt-4 mb-4")
     ]) ]),
 
+    dbc.FormGroup([
+        dbc.Label(["Binary Input: if insurance type is 'medicare' then 1 else 0"]),
+        dbc.Input(id="INSURANCE_Medicare",
+                  type="number", 
+                  placeholder="Enter or select...",
+                  min=0, max=1),
+    ]),
     
-    dbc.Input(id="INSURANCE_Medicare",
-              type="number", 
-              placeholder="Binary Input: if insurance type is 'medicare' then 1 else 0",
-              min=0, max=1),
+    dbc.FormGroup([
+        dbc.Label(["Binary Input: if admitted as 'emergency' then 1 else 0"]),
+        dbc.Input(id="ADMISSION_TYPE_EMERGENCY",
+                  type="number", 
+                  placeholder="Enter or select...",
+                  min=0, max=1),
+    ]),
+    
+    dbc.FormGroup([
+        dbc.Label(["Binary Input: if previous location is 'PHYS REFERRAL/NORMAL DELI' then 1 else 0"]),    
+        dbc.Input(id="ADMISSION_LOCATION",
+                  type="number", 
+                  placeholder="Enter or select...",
+                  min=0, max=1),
+    ]),
+    
+    dbc.FormGroup([
+        dbc.Label(["Binary Input: if insurance type is 'Private' then 1 else 0"]),   
+        dbc.Input(id="INSURANCE_Private",
+                  type="number", 
+                  placeholder="Enter or select...",
+                  min=0, max=1),
+    ]),
+    
+    dbc.FormGroup([
+        dbc.Label(["Binary Input: if the patient is born here then 1 else 0"]), 
+        dbc.Input(id="ADMISSION_TYPE_NEWBORN",
+                  type="number", 
+                  placeholder="Enter or select...",
+                  min=0, max=1),
+    ]),
+    
+    dbc.FormGroup([
+        dbc.Label(["Numerical Input - Age: from 0 to 100"]), 
+        dbc.Input(id="Age",
+                  type="number", 
+                  placeholder="Enter or select...",
+                  min=0, max=100),
+    ]),
+    
+    dbc.FormGroup([
+        dbc.Label(["Binary Input: 1 = male, 0 = female"]), 
+        dbc.Input(id="Gender",
+                  type="number", 
+                  placeholder="Enter or select...",
+                  min=0, max=1),
+    ]),
+    
+    dbc.FormGroup([
+        dbc.Label(["Numerical Input - Mean heart rate: positive input"]), 
+        dbc.Input(id="HeartRate_Mean",
+                  type="number", 
+                  placeholder="Enter or select...",
+                  min=0,step = 0.001,style = {"float":"left"}),
+    ]),
+    
+    dbc.FormGroup([
+        dbc.Label(["Numerical Input - Mean glucose level: positive input"]), 
+        dbc.Input(id="Glucose_Mean",
+                  type="number", 
+                  placeholder="Enter or select...",
+                  min=0,step = 0.001,style = {"float":"left"}),
+    ]),
 
-
-    
-    dbc.Input(id="ADMISSION_TYPE_EMERGENCY",
-              type="number", 
-              placeholder="Binary Input: if admitted as 'emergency' then 1 else 0",
-              min=0, max=1),
-
-    
-    dbc.Input(id="ADMISSION_LOCATION",
-              type="number", 
-              placeholder="Binary Input: if previous location is 'PHYS REFERRAL/NORMAL DELI' then 1 else 0",
-              min=0, max=1),
-    
-    dbc.Input(id="INSURANCE_Private",
-              type="number", 
-              placeholder="Binary Input: if insurance type is 'Private' then 1 else 0",
-              min=0, max=1),
-    
-    dbc.Input(id="ADMISSION_TYPE_NEWBORN",
-              type="number", 
-              placeholder="Binary Input: if the patient is born here then 1 else 0",
-              min=0, max=1),
-    
-    dbc.Input(id="Age",
-              type="number", 
-              placeholder="Age: from 0 to 100",
-              min=0, max=100),
-    
-    dbc.Input(id="Gender",
-              type="number", 
-              placeholder="Binary Input: 1 = male, 0 = female",
-              min=0, max=1),
-    
-    
-    dbc.Input(id="HeartRate_Mean",
-              type="number", 
-              placeholder="Mean heart rate: positive input",
-              min=0,step = 0.001,style = {"float":"left"}),
-    
-    #dcc
-    dbc.Input(id="Glucose_Mean",
-              type="number", 
-              placeholder="Mean glucose level: positive input",
-              min=0,step = 0.001,style = {"float":"left"}),
-
-    dbc.Input(id="TempC_Max",
-              type="number", 
-              placeholder="Mean temperature: positive input",
-              min=0,step = 0.001,style = {"float":"left"}),
+    dbc.FormGroup([
+        dbc.Label(["Numerical Input - Mean temperature: positive input"]), 
+        dbc.Input(id="TempC_Max",
+                  type="number", 
+                  placeholder="Enter or select...",
+                  min=0,step = 0.001,style = {"float":"left"}),
+    ]),
 
     dbc.Row(dbc.Card(children=[html.H3(children='',
                                                className="text-center"),
@@ -163,6 +187,15 @@ layout = html.Div([
                     , className="mb-4"),
 
     #dbc.Button('Go', id='show',  color="primary", className="mt-3"),
+    
+     dbc.Container([
+        dbc.Row([
+
+                    dbc.Col(dbc.Card(html.H3(children='Predicted Discharge Location',
+                                 className="text-center text-light bg-dark"), body=True, color="dark")
+        , className="mt-4 mb-4")
+    ]) ]),
+    
     html.Div(id='out')]
 )
 
@@ -186,7 +219,7 @@ layout = html.Div([
 def predict(n_clicks, sl, sw, pl, pw, var0,var1,var2,var3,var4,var5):
     if n_clicks is None:
         res = "No Input"
-        return html.Div('Please input the values to see prediction.')
+        return html.Div('Please enter input values to see prediction.')
     else:
         flag = True
         for i in [sl, sw, pl, pw, var0,var1,var2,var3,var4,var5]:
@@ -227,7 +260,7 @@ def predict(n_clicks, sl, sw, pl, pw, var0,var1,var2,var3,var4,var5):
             im = "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcR361wqsab2SRwTjn6YFl-aOnlG9h8yGSUozg&usqp=CAU"
 
     return html.Div([
-        html.Div('                Best guess according to your input: {}'.format(res)), 
+        html.Div('                Best guess according to your input is: {}'.format(res)), 
         html.Hr(),
         html.Img(src=im ,style={'textAlign': 'center'}) #, style={'height':'20%', 'width':'20%'}
     ], style={'textAlign': 'center'})
