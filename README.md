@@ -16,16 +16,16 @@
 - Qiu, Zhi (Heather) - Master of Statistical Science, Duke University - [GitHub: ZhiQiu976](https://github.com/ZhiQiu976)
 - Xu, Zhenhui - Master of Biostatistics, Duke University - [GitHub: zhenhuixu](https://github.com/zhenhuixu)
 
-## Data
+**Data**
 
 [MIMIC](https://mimic.physionet.org)
 - Deidentified health data associated with ~60,000 ICU admissions (53,432 adult patients and 8,100 neonatal patients) from June 2001 to October 2012
 - Includes demographics, vital signs, laboratory tests, medications, and more
 
 
-- Technology Stack
+**Technology Stack**
 
-    - Online cloud platforms: AWS, GCP
-    - Data processing: pandas, numpy 
-    - Visualization: pyplot, seaborn
-    - Deployment and Interaction: dash, streamlit
+- Online cloud platforms: AWS, GCP
+- Data processing: pandas, numpy 
+- Visualization: pyplot, seaborn
+- Deployment and Interaction: dash, streamlit
