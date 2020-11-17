@@ -51,7 +51,7 @@ layout = html.Div([
             dbc.Col(dbc.Card(children=[html.H3(children='Read the Github-Pages detailing the process',
                                                className="text-center"),
                                        dbc.Button("Github-Pages",
-                                                  #href="https://medium.com/@meredithwan",
+                                                  href="https://github.com/biostats823-final-project/MIMIC-Predictive-Modeling",
                                                   color="primary",
                                                   className="mt-3"),
 
