@@ -16,6 +16,15 @@
 - Qiu, Zhi (Heather) - Master of Statistical Science, Duke University - [GitHub: ZhiQiu976](https://github.com/ZhiQiu976)
 - Xu, Zhenhui - Master of Biostatistics, Duke University - [GitHub: zhenhuixu](https://github.com/zhenhuixu)
 
+**Research Question**
+
+- How to predict different types of discharge locations for each patient accurately?
+
+**Dashboard Audience**
+
+- Care managers and clinicians (calendar page and online ML page)
+- Other data scientists with an interest in predicting discharge locations based on EHR data (home page, EDA and Models page)
+
 **Data**
 
 [MIMIC](https://mimic.physionet.org)
@@ -25,7 +34,7 @@
 
 **Technology Stack**
 
-- Online cloud platforms: AWS, GCP
+- Online cloud platforms: GCP
 - Data processing: pandas, numpy 
 - Visualization: pyplot, seaborn
-- Deployment and Interaction: dash, streamlit
+- Deployment and Interaction: dash
