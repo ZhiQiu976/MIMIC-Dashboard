@@ -4,7 +4,7 @@ from dash.dependencies import Input, Output, State
 import dash_bootstrap_components as dbc
 import dash
 
-from app import app
+from app import app, server
 # import all pages in the app
 from apps import home, EDA, calendar, Models, deploy_app
 

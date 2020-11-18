@@ -1,0 +1,8 @@
+.git
+.gitignore
+__pycache__/
+/setup.cfg
+.ipynb_checkpoints/
+.idea/
+.DS_Store
+LICENSE
