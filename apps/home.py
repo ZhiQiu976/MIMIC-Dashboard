@@ -29,7 +29,7 @@ layout = html.Div([
         ]),
 
         dbc.Row([
-            dbc.Col(dbc.Card(children=[html.H3(children='Get the original datasets used in this dashboard',
+            dbc.Col(dbc.Card(children=[html.H3(children='Link for original dataset',
                                                className="text-center"),
                                        dbc.Button("MIMIC",
                                                   href="https://mimic.physionet.org/",
@@ -38,9 +38,9 @@ layout = html.Div([
                              body=True, color="dark", outline=True)
                     , width=4, className="mb-4"),
 
-            dbc.Col(dbc.Card(children=[html.H3(children='Access the code used to build this dashboard',
+            dbc.Col(dbc.Card(children=[html.H3(children='Source code of this dashboard',
                                                className="text-center"),
-                                       dbc.Button("GitHub",
+                                       dbc.Button("GitHub-Repo 1",
                                                   href="https://github.com/biostats823-final-project/MIMIC-Dashboard",
                                                   color="primary",
                                                   className="mt-3"),
@@ -48,9 +48,9 @@ layout = html.Div([
                              body=True, color="dark", outline=True)
                     , width=4, className="mb-4"),
 
-            dbc.Col(dbc.Card(children=[html.H3(children='Access source code of this predictive modeling project',
+            dbc.Col(dbc.Card(children=[html.H3(children='Ssource code of this project',
                                                className="text-center"),
-                                       dbc.Button("Github-Pages",
+                                       dbc.Button("Github-Repo 2",
                                                   href="https://github.com/biostats823-final-project/MIMIC-Predictive-Modeling",
                                                   color="primary",
                                                   className="mt-3"),
