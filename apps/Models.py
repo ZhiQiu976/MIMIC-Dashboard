@@ -48,6 +48,12 @@ def plot_confusion_matrix(cm, labels):
 
 # function2
 def plot_df(df_test, df_train):
+    '''
+    Function for plotting dataframe as table.
+    
+    df_test : testing data (dataframe)
+    df_train : training data (dataframe)
+    '''
     
     colors = ['rgb(189, 215, 231)', 'rgb(107, 174, 214)',
           'rgb(49, 130, 189)', 'rgb(8, 81, 156)']
@@ -88,6 +94,8 @@ def plot_df(df_test, df_train):
 def size_adjustment(n):
     '''
     Helper function for controlling graph size.
+    
+    n : number of input to be shown later (int)
     '''
     
     if n is None:
