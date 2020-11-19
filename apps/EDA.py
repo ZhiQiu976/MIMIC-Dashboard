@@ -210,6 +210,22 @@ column_names = ['Hear Rate', 'Sys BP', 'Dias BP', 'Temperature', 'Respiratory Ra
               [Input('train_test', 'value'),
                Input('vitals', 'value')])
 def update_graph(train_test, vitals):
+    """Create pie plot of target vairbale, line plot of number of observations vs. discharge time,
+       histogram of continuous variables
+
+    Parameters
+    ----------
+    vitals : string
+        Name of continuous predictor values, read from the dropdown
+        
+    train_test: string
+        Train or test indicate using the training set or testing set
+    
+    Returns
+    -------
+    fig, fig2, fig4
+    	Pie plot, line plot, histogram
+    """
     if train_test is None:
         df_fig = y_train
         df_fig2 = df_train.groupby(['target', 'DISCHTIME'], as_index=False).size()
@@ -257,6 +273,18 @@ def update_graph(train_test, vitals):
 @app.callback(Output('cor_vital', 'figure'),
               [Input('train_test', 'value')])
 def update_correlation(train_test):
+     """Create correlation plot
+
+    Parameters
+    ----------       
+    train_test: string
+        Train or test indicate using the training set or testing set
+    
+    Returns
+    -------
+    fig3
+    	Corrrelation plot
+    """
     if train_test == "train":
         df_fig3 = X_train.loc[:, vitals_label + labs_label].join(y_train).corr()
     else:
@@ -270,6 +298,21 @@ def update_correlation(train_test):
               [Input('demographics', 'value'),
                Input('train_test', 'value')])
 def update_table_dm(demographics, train_test):
+    """Create table and starked bar plot for all categorical predictors
+
+    Parameters
+    ----------
+    demographics : string
+        Name of predictor values, read from the dropdown
+        
+    train_test: string
+        Train or test indicate using the training set or testing set
+    
+    Returns
+    -------
+    fig, fig2
+    	Table and starked bar plot
+    """
     if train_test == "test":
         dm_y_select = dm_y_test.copy()
     else:
@@ -312,6 +355,21 @@ def update_table_dm(demographics, train_test):
               [Input('vitals', 'value'),
                Input('train_test', 'value')])
 def update_table_vital(vitals, train_test):
+    """Create summary statistics table for all continuous predictors
+
+    Parameters
+    ----------
+    vitals : string
+        Name of predictor values, read from the dropdown
+        
+    train_test: string
+        Train or test indicate using the training set or testing set
+    
+    Returns
+    -------
+    fig3
+    	Table
+    """
     global df_vital
     if train_test == "train":
         vital_y_select = vital_y.copy()
