@@ -5,7 +5,7 @@
 
 - Multi-Page Dashboard held on Cloud Platform
 - Online ML Algorithm for Real-Time Prediction
-- [Deployment](https://bios823-mimic-dashboard.ue.r.appspot.com/) / [GitHub Link](https://github.com/biostats823-final-project/MIMIC-Dashboard)
+- [Deployed Dashboard](https://bios823-mimic-dashboard.ue.r.appspot.com/) / [GitHub Link for the Predictive Modeling Project](https://github.com/biostats823-final-project/MIMIC-Predictive-Modeling)
 
 **Team Name** : Team One
 
