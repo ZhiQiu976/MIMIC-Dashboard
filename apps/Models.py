@@ -202,7 +202,7 @@ def plot_multi(df, n):
 df_train = pd.read_csv('./Data/train_results_decoded.csv', index_col=0)
 df_test = pd.read_csv('./Data/test_results_decoded.csv', index_col=0)
 
-
+# main layout
 layout = html.Div([
     dbc.Container([
         dbc.Row([
